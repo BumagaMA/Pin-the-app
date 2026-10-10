@@ -51,6 +51,7 @@ add_executable(PinAppBM WIN32
     src/pinned_order.h
     src/selection_overlay.cpp
     src/selection_overlay.h
+    src/tray_activation.h
     src/tray_icon.cpp
     src/tray_icon.h
     src/window_utils.cpp

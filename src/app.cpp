@@ -217,7 +217,8 @@ LRESULT Application::HandleMessage(HWND window, UINT message, WPARAM wParam, LPA
     switch (message) {
     case kTrayMessage: {
         const UINT event = LOWORD(lParam);
-        if (event == WM_LBUTTONUP || event == NIN_SELECT || event == NIN_KEYSELECT) {
+        if (trayActivationFilter_.ShouldActivate(
+                event, static_cast<DWORD>(GetMessageTime()), GetDoubleClickTime())) {
             if (selecting_) {
                 EndSelection();
             } else {

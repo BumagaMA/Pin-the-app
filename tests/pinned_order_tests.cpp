@@ -1,4 +1,5 @@
 #include "pinned_order.h"
+#include "tray_activation.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -39,6 +40,26 @@ int main()
 
     order.Clear();
     Expect(order.Empty(), "Clear should remove every item");
+
+    TrayActivationFilter trayActivation;
+    Expect(
+        trayActivation.ShouldActivate(WM_LBUTTONUP, 1000, 500),
+        "mouse button release should activate selection");
+    Expect(
+        !trayActivation.ShouldActivate(NIN_SELECT, 1001, 500),
+        "NIN_SELECT paired with a mouse release must not activate twice");
+    Expect(
+        trayActivation.ShouldActivate(WM_LBUTTONUP, 1100, 500),
+        "a later physical click should activate selection again");
+    Expect(
+        trayActivation.ShouldActivate(NIN_SELECT, 2000, 500),
+        "a standalone select notification should activate selection");
+    Expect(
+        trayActivation.ShouldActivate(NIN_KEYSELECT, 2001, 500),
+        "keyboard selection should activate selection");
+    Expect(
+        !trayActivation.ShouldActivate(WM_MOUSEMOVE, 2002, 500),
+        "unrelated tray messages must not activate selection");
 
     std::cout << "All pin order tests passed.\n";
     return EXIT_SUCCESS;

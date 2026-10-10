@@ -6,6 +6,7 @@
 #include "logger.h"
 #include "pin_manager.h"
 #include "selection_overlay.h"
+#include "tray_activation.h"
 #include "tray_icon.h"
 #include "window_utils.h"
 
@@ -72,6 +73,7 @@ private:
     Config config_;
     Logger logger_;
     IconSet icons_;
+    TrayActivationFilter trayActivationFilter_;
     TrayIcon tray_;
     SelectionOverlay overlay_;
     PinManager pins_;
