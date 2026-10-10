@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  windows-x64:
+    runs-on: windows-2022
+
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Install portable executable
+        run: cmake --install build --config Release --prefix dist
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: PinAppBM-windows-x64
+          path: dist/PinAppBM.exe
+          if-no-files-found: error
